@@ -6,8 +6,8 @@ import androidx.paging.PagingState
 import com.edstry.therickandmortyapp.data.mapper.toDomain
 import com.edstry.therickandmortyapp.data.remote.api.RickMortyApi
 import com.edstry.therickandmortyapp.domain.model.Character
-import com.google.firebase.crashlytics.buildtools.reloc.org.apache.http.HttpException
 import kotlinx.coroutines.delay
+import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
