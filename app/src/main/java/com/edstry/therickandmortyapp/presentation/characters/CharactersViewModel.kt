@@ -19,20 +19,8 @@ class CharactersViewModel @Inject constructor(
     private val getCharactersPaged: GetCharactersPagedUseCase
 ): ViewModel() {
 
-    private val _state = MutableStateFlow(CharactersState())
-    val state: StateFlow<CharactersState> = _state.asStateFlow()
-
     // Paging flow
     val characters: Flow<PagingData<Character>> =
         getCharactersPaged()
             .cachedIn(viewModelScope)
-
-
-    fun setRefreshing(refreshing: Boolean) {
-        _state.update { it.copy(isRefreshing = refreshing) }
-    }
 }
-
-data class CharactersState(
-    val isRefreshing: Boolean = false
-)

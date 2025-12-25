@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.firebase.crashlytics.buildtools)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -76,6 +77,7 @@ dependencies {
     // room
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.paging)
     ksp(libs.androidx.room.compiler)
     // WorkManager
     implementation(libs.androidx.work.runtime.ktx)
@@ -91,10 +93,10 @@ dependencies {
     // retrofit and converter and logging-interceptor
     implementation(libs.retrofit)
     implementation(libs.converter.kotlinx.serialization)
-    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    implementation(libs.logging.interceptor)
     // datastore preference
     implementation(libs.androidx.datastore.preferences)
     // Paging 3
-    implementation("androidx.paging:paging-runtime:3.3.5")
-    implementation("androidx.paging:paging-compose:3.3.5")
+    implementation(libs.androidx.paging.runtime)
+    implementation(libs.androidx.paging.compose)
 }

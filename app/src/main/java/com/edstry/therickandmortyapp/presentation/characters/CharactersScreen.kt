@@ -15,8 +15,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -26,6 +28,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.paging.LoadState
@@ -41,14 +44,19 @@ fun CharactersScreen(
     Scaffold(
         topBar = { TopAppBar(title = { Text("Rick & Morty") }) }
     ) { padding ->
-        Box(Modifier.fillMaxSize().padding(padding)) {
+        Box(Modifier
+            .fillMaxSize()
+            .padding(padding)) {
 
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(12.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                items(pagingItems.itemCount) { index ->
+                items(
+                    count = pagingItems.itemCount,
+                    key = { index -> pagingItems[index]?.id ?: "placeholder_$index" }
+                ) { index ->
                     val item = pagingItems[index] ?: return@items
                     CharacterRow(
                         name = item.name,
@@ -66,12 +74,14 @@ fun CharactersScreen(
                                 horizontalArrangement = Arrangement.Center
                             ) { CircularProgressIndicator() }
                         }
+
                         is LoadState.Error -> {
                             ErrorBlock(
                                 message = append.error.message ?: "Ошибка загрузки",
                                 onRetry = { pagingItems.retry() }
                             )
                         }
+
                         else -> Unit
                     }
                 }
@@ -82,6 +92,7 @@ fun CharactersScreen(
                 is LoadState.Loading -> {
                     CircularProgressIndicator(Modifier.align(Alignment.Center))
                 }
+
                 is LoadState.Error -> {
                     ErrorBlock(
                         modifier = Modifier.align(Alignment.Center),
@@ -89,6 +100,7 @@ fun CharactersScreen(
                         onRetry = { pagingItems.retry() }
                     )
                 }
+
                 else -> Unit
             }
         }
@@ -97,15 +109,29 @@ fun CharactersScreen(
 
 @Composable
 private fun CharacterRow(name: String, meta: String, imageUrl: String) {
-    Card {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(100.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
+        shape = RoundedCornerShape(5.dp)
+    ) {
         Row(
-            Modifier.fillMaxWidth().padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically
+            Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             AsyncImage(
                 model = imageUrl,
                 contentDescription = name,
-                modifier = Modifier.size(64.dp)
+                modifier = Modifier
+                    .clip(RoundedCornerShape(
+                        topStart = 5.dp,
+                        bottomStart = 5.dp)
+                    )
             )
             Spacer(Modifier.width(12.dp))
             Column {
